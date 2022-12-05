@@ -175,7 +175,7 @@ WHERE isyeri IN (SELECT marka_isim FROM markalar WHERE marka_id>101);
 --Calisanlar tablosunda maksimum maası listeleyiniz
 SELECT max(maas) AS maksimum_maas FROM calisanlar2;
 /*
-    Eğer bir sütuna geçici olarak bir isim vermek istersek AS komutunu yazdıktan sonra vermek
+Eğer bir sütuna geçici olarak bir isim vermek istersek AS komutunu yazdıktan sonra vermek
 istediğimiz ismi yazarız
 */
 --Calisanlar tablosunda minimum maası listeleyiniz
@@ -266,7 +266,7 @@ WHERE exists (SELECT urun_id FROM nisan WHERE mart.urun_id=nisan.urun_id)
 NİSAN ayında satın alan MUSTERI_ISIM'lerini listeleyen bir sorgu yazınız.
 */
 SELECT urun_isim,musteri_isim FROM nisan
-WHERE exists (SELECT urun_isim FROM mart WHERE mart.urun_isim=nisan.urun_isim)
+WHERE exists (SELECT urun_isim FROM mart WHERE mart.urun_isim=nisan.urun_isim);
 --DML--> UPDATE
 CREATE TABLE tedarikciler -- parent
 (
@@ -278,7 +278,7 @@ INSERT INTO tedarikciler VALUES (101, 'IBM', 'Kim Yon');
 INSERT INTO tedarikciler VALUES (102, 'Huawei', 'Çin Li');
 INSERT INTO tedarikciler VALUES (103, 'Erikson', 'Maki Tammen');
 INSERT INTO tedarikciler VALUES (104, 'Apple', 'Adam Eve');
-CREATE TABLE urunler -- child
+CREATE TABLE urunler1 -- child
 (
 ted_vergino int, 
 urun_id int, 
@@ -287,15 +287,15 @@ musteri_isim VARCHAR(50),
 CONSTRAINT fk_urunler FOREIGN KEY(ted_vergino) REFERENCES tedarikciler(vergi_no)
 on delete cascade
 );    
-INSERT INTO urunler VALUES(101, 1001,'Laptop', 'Ayşe Can');
-INSERT INTO urunler VALUES(102, 1002,'Phone', 'Fatma Aka');
-INSERT INTO urunler VALUES(102, 1003,'TV', 'Ramazan Öz');
-INSERT INTO urunler VALUES(102, 1004,'Laptop', 'Veli Han');
-INSERT INTO urunler VALUES(103, 1005,'Phone', 'Canan Ak');
-INSERT INTO urunler VALUES(104, 1006,'TV', 'Ali Bak');
-INSERT INTO urunler VALUES(104, 1007,'Phone', 'Aslan Yılmaz');
+INSERT INTO urunler1 VALUES(101, 1001,'Laptop', 'Ayşe Can');
+INSERT INTO urunler1 VALUES(102, 1002,'Phone', 'Fatma Aka');
+INSERT INTO urunler1 VALUES(102, 1003,'TV', 'Ramazan Öz');
+INSERT INTO urunler1 VALUES(102, 1004,'Laptop', 'Veli Han');
+INSERT INTO urunler1 VALUES(103, 1005,'Phone', 'Canan Ak');
+INSERT INTO urunler1 VALUES(104, 1006,'TV', 'Ali Bak');
+INSERT INTO urunler1 VALUES(104, 1007,'Phone', 'Aslan Yılmaz');
 select * from tedarikciler
-select * from urunler
+select * from urunler1
 -- vergi_no’su 102 olan tedarikcinin firma ismini 'Vestel' olarak güncelleyeniz.
 /*
 UPDATE tablo_adi
@@ -307,22 +307,22 @@ SET firma_ismi = 'Vestel' WHERE vergi_no=102;
 UPDATE tedarikciler
 SET firma_ismi = 'Casper',irtibat_ismi='Ali Veli' WHERE vergi_no=101
 --  urunler tablosundaki 'Phone' değerlerini 'Telefon' olarak güncelleyiniz.
-UPDATE urunler
+UPDATE urunler1
 SET urun_isim = 'Telefon' WHERE urun_isim='Phone';
 -- urunler tablosundaki urun_id değeri 1004'ten büyük olanların urun_id’sini 1 arttırın.
-UPDATE urunler
+UPDATE urunler1
 SET urun_id = urun_id + 1 WHERE urun_id>1004;
 -- urunler tablosundaki tüm ürünlerin urun_id değerini ted_vergino sutun değerleri ile toplayarak güncelleyiniz.
-UPDATE urunler
+UPDATE urunler1
 SET urun_id = urun_id + ted_vergino
-DELETE FROM urunler
+DELETE FROM urunler1
 --* urunler tablosundan Ali Bak’in aldigi urunun ismini, tedarikci  tablosunda irtibat_ismi 
 --'Adam Eve' olan firmanın ismi (firma_ismi) ile degistiriniz.
-UPDATE urunler                      
+UPDATE urunler1                      
 SET urun_isim = (SELECT firma_ismi FROM tedarikciler WHERE irtibat_ismi = 'Adam Eve')                       
 WHERE musteri_isim='Ali Bak';                       
 --* Urunler tablosunda laptop satin alan musterilerin ismini, firma_ismi Apple’in irtibat_isim'i ile degistirin.
-UPDATE urunler                      
+UPDATE urunler1                      
 SET musteri_isim = (SELECT irtibat_ismi FROM tedarikciler WHERE firma_ismi='Apple')                     
 WHERE urun_isim='Laptop'                        
 
